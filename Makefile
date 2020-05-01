@@ -7,7 +7,7 @@ build:
 	poetry build
 
 publish:
-	poetry publish -r diff_calc
+	poetry publish -r gendiff
 
 run:
 	poetry run gendiff -h
