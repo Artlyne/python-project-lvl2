@@ -1,7 +1,7 @@
 """Finds the difference between two JSON files."""
 import json
 
-SAME, ADDED, REMOVED = ' ', '+', '-'
+SAME, REMOVED, ADDED = ' ', '-', '+'
 
 
 def generate_diff(path_to_file1, path_to_file2):
@@ -12,28 +12,31 @@ def generate_diff(path_to_file1, path_to_file2):
         path_to_file2 (str): specify the path to the file2
 
     Returns:
-        str
+        str: difference between files, where first symbol in string means:
+            ' ' - same item
+            '-' - removed item
+            '+' - added item
     """
     before = json.load(open(path_to_file1))
     after = json.load(open(path_to_file2))
 
-    same_keys = before.keys() & after.keys()
-    removed_keys = before.keys() - after.keys()
-    added_keys = after.keys() - before.keys()
+    same_keys = sorted(before.keys() & after.keys())
+    removed_keys = sorted(before.keys() - after.keys())
+    added_keys = sorted(after.keys() - before.keys())
 
-    difference = ''
+    difference = []
 
     for key in same_keys:
         if before[key] == after[key]:
-            difference += f'{SAME} {key}: {before[key]}\n'
+            difference.append(f'{SAME} {key}: {before[key]}')
         else:
-            difference += f'{ADDED} {key}: {after[key]}\n'
-            difference += f'{REMOVED} {key}: {before[key]}\n'
+            difference.append(f'{ADDED} {key}: {after[key]}')
+            difference.append(f'{REMOVED} {key}: {before[key]}')
 
     for key in removed_keys:
-        difference += f'{REMOVED} {key}: {before[key]}\n'
+        difference.append(f'{REMOVED} {key}: {before[key]}')
 
     for key in added_keys:
-        difference += f'{ADDED} {key}: {after[key]}\n'
+        difference.append(f'{ADDED} {key}: {after[key]}')
 
-    return difference
+    return '\n'.join(difference)
