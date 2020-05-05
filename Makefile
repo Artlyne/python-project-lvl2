@@ -12,5 +12,5 @@ publish:
 lint:
 	poetry run flake8 gendiff
 
-run:
-	poetry run gendiff -h
+test:
+	poetry run pytest tests/

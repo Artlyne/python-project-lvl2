@@ -4,6 +4,10 @@ import argparse
 from gendiff.engine import generate_diff
 
 
+
+
+
+
 def main():
     """Run this script."""
     parser = argparse.ArgumentParser(description='Generate diff')
