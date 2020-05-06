@@ -1,5 +1,6 @@
 """Finds the difference between two JSON files."""
-import json
+from gendiff import file_loader
+
 
 SAME, REMOVED, ADDED = '   ', '  -', '  +'
 
@@ -17,8 +18,8 @@ def generate_diff(path_to_file1, path_to_file2):
             '  -' - removed item
             '  +' - added item
     """
-    before = json.load(open(path_to_file1))
-    after = json.load(open(path_to_file2))
+    before = file_loader.load(open(path_to_file1))
+    after = file_loader.load(open(path_to_file2))
 
     same_keys = sorted(before.keys() & after.keys())
     removed_keys = sorted(before.keys() - after.keys())
