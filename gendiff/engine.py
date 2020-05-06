@@ -1,16 +1,16 @@
-"""Finds the difference between two JSON files."""
+"""Finds the difference between two JSON or YAML files."""
 from gendiff import file_loader
 
 
 SAME, REMOVED, ADDED = '   ', '  -', '  +'
 
 
-def generate_diff(path_to_file1, path_to_file2):
-    """Find the difference between two JSON files.
+def generate_diff(file1, file2):
+    """Find the difference between two JSON or YAML files.
 
-    Args:
-        path_to_file1 (str): specify the path to the file1
-        path_to_file2 (str): specify the path to the file2
+    Parameters:
+        file1 (str): specify file or path file
+        file2 (str): specify file or path file
 
     Returns:
         str: difference between files, where first symbols in string means:
@@ -18,8 +18,8 @@ def generate_diff(path_to_file1, path_to_file2):
             '  -' - removed item
             '  +' - added item
     """
-    before = file_loader.load(open(path_to_file1))
-    after = file_loader.load(open(path_to_file2))
+    before = file_loader.load(file1)
+    after = file_loader.load(file2)
 
     same_keys = sorted(before.keys() & after.keys())
     removed_keys = sorted(before.keys() - after.keys())
