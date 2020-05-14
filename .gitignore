@@ -3,4 +3,5 @@ __pycache__
 dist/
 .venv/
 .idea/
-
+.coverage
+coverage.xml
