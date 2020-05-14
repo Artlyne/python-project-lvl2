@@ -1,46 +1,75 @@
-"""Finds the difference between two JSON or YAML files."""
+"""Finds the difference between two configuration files."""
 from gendiff import file_loader
 
+SAME, REMOVED, ADDED = '  ', '- ', '+ '
 
-SAME, REMOVED, ADDED = '   ', '  -', '  +'
+
+def get_same_keys(first_dict, second_dict):
+    return first_dict.keys() & second_dict.keys()
 
 
-def generate_diff(file1, file2):
-    """Find the difference between two JSON or YAML files.
+def get_removed_keys(first_dict, second_dict):
+    return first_dict.keys() - second_dict.keys()
 
-    Parameters:
-        file1 (str): specify file or path file
-        file2 (str): specify file or path file
+
+def get_added_keys(first_dict, second_dict):
+    return second_dict.keys() - first_dict.keys()
+
+
+def diff(first_dict, second_dict):
+    difference = {}
+
+    for key in get_same_keys(first_dict, second_dict):
+        if isinstance(first_dict[key], dict):
+            difference[f'{SAME}{key}'] = \
+                diff(first_dict[key], second_dict[key])
+        elif first_dict[key] == second_dict[key]:
+            difference[f'{SAME}{key}'] = first_dict[key]
+        else:
+            difference[f'{REMOVED}{key}'] = first_dict[key]
+            difference[f'{ADDED}{key}'] = second_dict[key]
+
+    for key in get_removed_keys(first_dict, second_dict):
+        difference[f'{REMOVED}{key}'] = first_dict[key]
+
+    for key in get_added_keys(first_dict, second_dict):
+        difference[f'{ADDED}{key}'] = second_dict[key]
+
+    return difference
+
+
+def rendering(difference, depth='  '):
+    result = []
+    for key, value in sorted(difference.items(), key=lambda x: x[0][2:]):
+        # sorts lexicographically by key
+        # we need to skip the first two characters [2:] in the key x[0],
+        # because they mean the difference
+        if isinstance(value, dict):
+            subtree = rendering(value, depth=depth + '    ')
+            result.append(f'{depth}{key}: {{\n'
+                          f'{subtree}\n'
+                          f'  {depth}}}')
+        else:
+            result.append(f'{depth}{key}: {value}')
+
+    return '\n'.join(result)
+
+
+def generate_diff(first_file, second_file):
+    """Finds the difference between two configuration files.
+
+    Supported YAML and JSON files.
+
+    Args:
+        first_file (str): first configuration file
+        second_file (str): second configuration file
 
     Returns:
-        str: difference between files, where first symbols in string means:
-            '   ' - same item
-            '  -' - removed item
-            '  +' - added item
+        str: difference between files, where first symbol in key means:
+            ' ' - same item
+            '-' - removed item
+            '+' - added item
     """
-    before = file_loader.load(file1)
-    after = file_loader.load(file2)
-
-    same_keys = sorted(before.keys() & after.keys())
-    removed_keys = sorted(before.keys() - after.keys())
-    added_keys = sorted(after.keys() - before.keys())
-
-    difference = ['{']
-
-    for key in same_keys:
-        if before[key] == after[key]:
-            difference.append(f'{SAME} {key}: {before[key]}')
-        else:
-            difference.extend([
-                f'{ADDED} {key}: {after[key]}',
-                f'{REMOVED} {key}: {before[key]}'
-            ])
-
-    for key in removed_keys:
-        difference.append(f'{REMOVED} {key}: {before[key]}')
-
-    for key in added_keys:
-        difference.append(f'{ADDED} {key}: {after[key]}')
-
-    difference.append('}')
-    return '\n'.join(difference)
+    first = file_loader.load(first_file)
+    second = file_loader.load(second_file)
+    return f'{{\n{rendering(diff(first, second))}\n}}'
