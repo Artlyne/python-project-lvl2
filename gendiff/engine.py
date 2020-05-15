@@ -1,5 +1,6 @@
 """Finds the difference between two configuration files."""
 from gendiff import file_loader
+from gendiff.form import extended
 
 SAME, REMOVED, ADDED = '  ', '- ', '+ '
 
@@ -38,23 +39,6 @@ def diff(first_dict, second_dict):
     return difference
 
 
-def rendering(difference, depth='  '):
-    result = []
-    for key, value in sorted(difference.items(), key=lambda x: x[0][2:]):
-        # sorts lexicographically by key
-        # we need to skip the first two characters [2:] in the key x[0],
-        # because they mean the difference
-        if isinstance(value, dict):
-            subtree = rendering(value, depth=depth + '    ')
-            result.append(f'{depth}{key}: {{\n'
-                          f'{subtree}\n'
-                          f'  {depth}}}')
-        else:
-            result.append(f'{depth}{key}: {value}')
-
-    return '\n'.join(result)
-
-
 def generate_diff(first_file, second_file):
     """Finds the difference between two configuration files.
 
@@ -72,4 +56,4 @@ def generate_diff(first_file, second_file):
     """
     first = file_loader.load(first_file)
     second = file_loader.load(second_file)
-    return f'{{\n{rendering(diff(first, second))}\n}}'
+    return extended.show(diff(first, second))
