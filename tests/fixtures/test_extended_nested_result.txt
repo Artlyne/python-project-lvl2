@@ -6,9 +6,13 @@
       + setting4: blah blah
       + setting5: {
           key5: value5
+          key6: value6
         }
       - setting6: {
           key: value
+        }
+      - site: {
+          base: {'hexlet': 'python'}
         }
     }
     group1: {
