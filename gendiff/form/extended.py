@@ -1,19 +1,40 @@
-def generate(difference, depth='  '):
-    result = []
-    for key, value in sorted(difference.items(), key=lambda x: x[0][2:]):
-        # sorts lexicographically by key
-        # we need to skip the first two characters [2:] in the key x[0],
-        # because they mean the difference
-        if isinstance(value, dict):
-            subtree = generate(value, depth=depth + '    ')
-            result.append(f'{depth}{key}: {{\n'
-                          f'{subtree}\n'
-                          f'  {depth}}}')
-        else:
-            result.append(f'{depth}{key}: {value}')
+def build_difference(difference, depth='  '):
+    diff = []
+    for key, (status, value) in sorted(difference.items()):
+        if status == 'nested':
+            subtree = build_difference(value, depth=depth + '    ')
+            diff.append(f'{depth}  {key}: {{\n{subtree}\n  {depth}}}')
 
-    return '\n'.join(result)
+        elif status == 'same':
+            diff.append(f'{depth}  {key}: {value}')
+
+        elif status == 'removed':
+            if isinstance(value, dict):
+                value = build_subtree(value, depth=depth + '  ')
+            diff.append(f'{depth}- {key}: {value}')
+
+        elif status == 'added':
+            if isinstance(value, dict):
+                value = build_subtree(value, depth=depth + '  ')
+            diff.append(f'{depth}+ {key}: {value}')
+
+        elif status == 'changed':
+            removed_value = value[0]
+            added_value = value[1]
+            diff.extend([f'{depth}- {key}: {removed_value}',
+                         f'{depth}+ {key}: {added_value}'])
+
+    return '\n'.join(diff)
 
 
-def show(difference):
-    return f'{{\n{generate(difference, depth="  ")}\n}}'
+def build_subtree(dictionary, depth):
+    difference = ['{']
+    for key, value in dictionary.items():
+        difference.append(f'  {depth}{key}: {value}')
+    difference.append(f'{depth}}}')
+    return '\n'.join(difference)
+
+
+def show_difference(difference):
+    diff = build_difference(difference)
+    return f'{{\n{diff}\n}}'

@@ -1,59 +1,48 @@
-"""Finds the difference between two configuration files."""
 from gendiff import file_loader
-from gendiff.form import extended
+from gendiff.form import extended, plain
 
-SAME, REMOVED, ADDED = '  ', '- ', '+ '
+SAME, REMOVED, ADDED, CHANGED, NESTED = \
+    'same', 'removed', 'added', 'changed', 'nested'
 
-
-def get_same_keys(first_dict, second_dict):
-    return first_dict.keys() & second_dict.keys()
-
-
-def get_removed_keys(first_dict, second_dict):
-    return first_dict.keys() - second_dict.keys()
-
-
-def get_added_keys(first_dict, second_dict):
-    return second_dict.keys() - first_dict.keys()
+FORMATS = {'extended': extended.show_difference,
+           'plain': plain.show_difference}
 
 
 def diff(first_dict, second_dict):
+    same_keys = first_dict.keys() & second_dict.keys()
+    removed_keys = first_dict.keys() - second_dict.keys()
+    added_keys = second_dict.keys() - first_dict.keys()
+
     difference = {}
 
-    for key in get_same_keys(first_dict, second_dict):
-        if isinstance(first_dict[key], dict):
-            difference[f'{SAME}{key}'] = \
-                diff(first_dict[key], second_dict[key])
-        elif first_dict[key] == second_dict[key]:
-            difference[f'{SAME}{key}'] = first_dict[key]
+    for key in same_keys:
+        value_of_first = first_dict[key]
+        value_of_second = second_dict[key]
+
+        if isinstance(value_of_first, dict) and \
+                isinstance(value_of_second, dict):
+            difference[key] = (NESTED, diff(value_of_first, value_of_second))
+
+        elif value_of_first == value_of_second:
+            difference[key] = (SAME, value_of_first)
+
         else:
-            difference[f'{REMOVED}{key}'] = first_dict[key]
-            difference[f'{ADDED}{key}'] = second_dict[key]
+            difference[key] = (CHANGED, (value_of_first, value_of_second))
 
-    for key in get_removed_keys(first_dict, second_dict):
-        difference[f'{REMOVED}{key}'] = first_dict[key]
+    for key in removed_keys:
+        value = first_dict[key]
+        difference[key] = (REMOVED, value)
 
-    for key in get_added_keys(first_dict, second_dict):
-        difference[f'{ADDED}{key}'] = second_dict[key]
+    for key in added_keys:
+        value = second_dict[key]
+        difference[key] = (ADDED, value)
 
     return difference
 
 
-def generate_diff(first_file, second_file):
-    """Finds the difference between two configuration files.
-
-    Supported YAML and JSON files.
-
-    Args:
-        first_file (str): first configuration file
-        second_file (str): second configuration file
-
-    Returns:
-        str: difference between files, where first symbol in key means:
-            ' ' - same item
-            '-' - removed item
-            '+' - added item
-    """
-    first = file_loader.load(first_file)
-    second = file_loader.load(second_file)
-    return extended.show(diff(first, second))
+def generate_diff(first_file, second_file, form):
+    first_dict = file_loader.load(first_file)
+    second_dict = file_loader.load(second_file)
+    difference = FORMATS[form](diff(first_dict, second_dict))
+    print(difference)
+    return difference
