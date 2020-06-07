@@ -1,17 +1,18 @@
 #!/usr/bin/env python3
-"""gendiff script."""
 import argparse
 from gendiff.engine import generate_diff
 
 
 def main():
-    """Run this script."""
     parser = argparse.ArgumentParser(description='Generate diff')
     parser.add_argument('first_file', type=str)
     parser.add_argument('second_file', type=str)
-    parser.add_argument('-f', '--format', help='set format of output')
+    parser.add_argument('-f', '--format',
+                        help='set format of output',
+                        default='extended',
+                        choices='plain')
     args = parser.parse_args()
-    print(generate_diff(args.first_file, args.second_file))
+    generate_diff(args.first_file, args.second_file, args.format)
 
 
 if __name__ == '__main__':
