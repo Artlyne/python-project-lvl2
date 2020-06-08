@@ -1,11 +1,12 @@
 from gendiff import file_loader
-from gendiff.form import extended, plain
+from gendiff.form import extended, plain, json
 
 SAME, REMOVED, ADDED, CHANGED, NESTED = \
     'same', 'removed', 'added', 'changed', 'nested'
 
 FORMATS = {'extended': extended.show_difference,
-           'plain': plain.show_difference}
+           'plain': plain.show_difference,
+           'json': json.show_difference}
 
 
 def diff(first_dict, second_dict):

@@ -10,7 +10,7 @@ def main():
     parser.add_argument('-f', '--format',
                         help='set format of output',
                         default='extended',
-                        choices='plain')
+                        choices=['plain', 'json'])
     args = parser.parse_args()
     generate_diff(args.first_file, args.second_file, args.format)
 
