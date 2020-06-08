@@ -1,0 +1,72 @@
+{
+  "common": [
+    "nested",
+    {
+      "setting1": [
+        "same",
+        "Value 1"
+      ],
+      "setting2": [
+        "removed",
+        "200"
+      ],
+      "setting3": [
+        "same",
+        true
+      ],
+      "setting4": [
+        "added",
+        "blah blah"
+      ],
+      "setting5": [
+        "added",
+        {
+          "key5": "value5",
+          "key6": "value6"
+        }
+      ],
+      "setting6": [
+        "removed",
+        {
+          "key": "value"
+        }
+      ],
+      "site": [
+        "removed",
+        {
+          "base": {
+            "hexlet": "python"
+          }
+        }
+      ]
+    }
+  ],
+  "group1": [
+    "nested",
+    {
+      "baz": [
+        "changed",
+        [
+          "bas",
+          "bars"
+        ]
+      ],
+      "foo": [
+        "same",
+        "bar"
+      ]
+    }
+  ],
+  "group2": [
+    "removed",
+    {
+      "abc": "12345"
+    }
+  ],
+  "group3": [
+    "added",
+    {
+      "fee": "100500"
+    }
+  ]
+}
