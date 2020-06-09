@@ -1,10 +1,8 @@
 def build_difference(difference, path=''):
     diff = []
-
     for key, (status, value) in sorted(difference.items()):
         if status == 'nested':
-            path += f'{key}.'
-            diff.append(build_difference(value, path))
+            diff.append(build_difference(value, path=path + f'{key}.'))
 
         elif status == 'removed':
             diff.append(f"Property '{path}{key}' was removed")
