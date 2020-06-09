@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "Artlyne_gendiff"
-version = "0.6.0"
+version = "0.6.1"
 description = "Difference Calculator"
 authors = ["Artlyne <Artlynee@gmail.com>"]
 packages = [
