@@ -84,7 +84,7 @@ Property 'group1.baz' was changed. From 'bas' to 'bars'
 Property 'group2' was removed
 Property 'group3' was added with value: 'complex value'
 ```
-[![asciicast](https://asciinema.org/a/Z7u8dqBy0cqJBc3izhVW5eWpf.svg)](https://asciinema.org/a/Z7u8dqBy0cqJBc3izhVW5eWpf)
+[![asciicast](https://asciinema.org/a/2P8fcFnY30vb52m5R5p5206zX.svg)](https://asciinema.org/a/2P8fcFnY30vb52m5R5p5206zX)
 
 #### Json (optional)
 ```
