@@ -7,7 +7,7 @@ yaml_flat_file2 = './tests/fixtures/test_flat_after.yaml'
 extended_flat_result = open(
     './tests/fixtures/test_extended_flat_result.txt').read()
 plain_flat_result = open('./tests/fixtures/test_plain_flat_result.txt').read()
-json_flat_result = open('./tests/fixtures/test_json_flat_result.txt').read()
+json_flat_result = open('./tests/fixtures/test_json_flat_result.json').read()
 
 
 def test_flat_files():
@@ -34,7 +34,7 @@ extended_nested_result = open(
 plain_nested_result = open(
     './tests/fixtures/test_plain_nested_result.txt').read()
 json_nested_result = open(
-    './tests/fixtures/test_json_nested_result.txt').read()
+    './tests/fixtures/test_json_nested_result.json').read()
 
 
 def test_nested_files():
