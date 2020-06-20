@@ -5,9 +5,9 @@ from gendiff.parser import parse_args
 
 
 def main():
-    generate_diff(parse_args().first_file,
-                  parse_args().second_file,
-                  parse_args().format)
+    print(generate_diff(parse_args().first_file,
+                        parse_args().second_file,
+                        parse_args().format))
 
 
 if __name__ == '__main__':

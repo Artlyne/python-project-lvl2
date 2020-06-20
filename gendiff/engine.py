@@ -53,5 +53,4 @@ def generate_diff(first_file, second_file, form):
     first_dict = load_file(first_file)
     second_dict = load_file(second_file)
     difference = FORMATS[form](diff(first_dict, second_dict))
-    print(difference)
     return difference
