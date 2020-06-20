@@ -1,12 +1,20 @@
-from gendiff import file_loader
-from gendiff.form import extended, plain, json
+import json
+import yaml
+from gendiff.form import extended, plain, json_format
 
 SAME, REMOVED, ADDED, CHANGED, NESTED = \
     'same', 'removed', 'added', 'changed', 'nested'
 
 FORMATS = {'extended': extended.show_difference,
            'plain': plain.show_difference,
-           'json': json.show_difference}
+           'json': json_format.show_difference}
+
+
+def load_file(file):
+    if file.endswith('.json'):
+        return json.load(open(file))
+    if file.endswith('.yaml'):
+        return yaml.load(open(file), Loader=yaml.FullLoader)
 
 
 def diff(first_dict, second_dict):
@@ -42,8 +50,8 @@ def diff(first_dict, second_dict):
 
 
 def generate_diff(first_file, second_file, form):
-    first_dict = file_loader.load(first_file)
-    second_dict = file_loader.load(second_file)
+    first_dict = load_file(first_file)
+    second_dict = load_file(second_file)
     difference = FORMATS[form](diff(first_dict, second_dict))
     print(difference)
     return difference
