@@ -1,5 +1,6 @@
 import json
 import yaml
+import os
 from gendiff.form import extended, plain, json_format
 
 SAME, REMOVED, ADDED, CHANGED, NESTED = \
@@ -10,11 +11,15 @@ FORMATS = {'extended': extended.show_difference,
            'json': json_format.show_difference}
 
 
-def load_file(file):
-    if file.endswith('.json'):
-        return json.load(open(file))
-    if file.endswith('.yaml'):
-        return yaml.load(open(file), Loader=yaml.FullLoader)
+def load_file(filename):
+    _, ext = os.path.splitext(filename)
+    file_format = ext.lower()
+    if file_format == '.json':
+        return json.load(open(filename))
+    elif file_format == '.yaml' or file_format == '.yml':
+        return yaml.load(open(filename), Loader=yaml.SafeLoader)
+    else:
+        raise ValueError(f'Unknown file type: {filename}')
 
 
 def diff(first_dict, second_dict):
