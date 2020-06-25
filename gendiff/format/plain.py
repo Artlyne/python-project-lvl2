@@ -22,6 +22,6 @@ def build_difference(difference, path=''):
     return '\n'.join(diff)
 
 
-def show_difference(difference):
+def format(difference):
     diff = build_difference(difference)
     return diff

@@ -35,6 +35,6 @@ def build_subtree(dictionary, depth):
     return '\n'.join(difference)
 
 
-def show_difference(difference):
+def format(difference):
     diff = build_difference(difference)
     return f'{{\n{diff}\n}}'

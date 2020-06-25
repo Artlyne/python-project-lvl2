@@ -1,14 +1,10 @@
 import json
 import yaml
 import os
-from gendiff.form import extended, plain, json_format
+
 
 SAME, REMOVED, ADDED, CHANGED, NESTED = \
     'same', 'removed', 'added', 'changed', 'nested'
-
-FORMATS = {'extended': extended.show_difference,
-           'plain': plain.show_difference,
-           'json': json_format.show_difference}
 
 
 def load_file(filename):
@@ -54,8 +50,8 @@ def diff(first_dict, second_dict):
     return difference
 
 
-def generate_diff(first_file, second_file, form):
+def generate_diff(first_file, second_file, format):
     first_dict = load_file(first_file)
     second_dict = load_file(second_file)
-    difference = FORMATS[form](diff(first_dict, second_dict))
+    difference = format(diff(first_dict, second_dict))
     return difference
