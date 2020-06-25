@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-import argparse
 from gendiff.engine import generate_diff
 from gendiff.cli import parse_args
 
