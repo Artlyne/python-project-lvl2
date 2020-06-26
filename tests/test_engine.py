@@ -1,6 +1,6 @@
 from gendiff.diff import generate_diff
 from gendiff import format
-
+import json
 
 json_flat_file1 = './tests/fixtures/test_flat_before.json'
 json_flat_file2 = './tests/fixtures/test_flat_after.json'
@@ -21,10 +21,12 @@ def test_flat_files():
                          format.plain) == plain_flat_result
     assert generate_diff(yaml_flat_file1, yaml_flat_file2,
                          format.plain) == plain_flat_result
-    assert generate_diff(json_flat_file1, json_flat_file2,
-                         format.json) == json_flat_result
-    assert generate_diff(yaml_flat_file1, yaml_flat_file2,
-                         format.json) == json_flat_result
+    assert json.loads(generate_diff(json_flat_file1, json_flat_file2,
+                                    format.json)) == json.loads(
+        json_flat_result)
+    assert json.loads(generate_diff(yaml_flat_file1, yaml_flat_file2,
+                                    format.json)) == json.loads(
+        json_flat_result)
 
 
 json_nested_file1 = './tests/fixtures/test_nested_before.json'
@@ -48,7 +50,9 @@ def test_nested_files():
                          format.plain) == plain_nested_result
     assert generate_diff(yaml_nested_file1, yaml_nested_file2,
                          format.plain) == plain_nested_result
-    assert generate_diff(json_nested_file1, json_nested_file2,
-                         format.json) == json_nested_result
-    assert generate_diff(yaml_nested_file1, yaml_nested_file2,
-                         format.json) == json_nested_result
+    assert json.loads(generate_diff(json_nested_file1, json_nested_file2,
+                                    format.json)) == json.loads(
+        json_nested_result)
+    assert json.loads(generate_diff(yaml_nested_file1, yaml_nested_file2,
+                                    format.json)) == json.loads(
+        json_nested_result)

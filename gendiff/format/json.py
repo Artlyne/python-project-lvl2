@@ -2,4 +2,4 @@ import json
 
 
 def format(difference):
-    return json.dumps(difference, sort_keys=True, indent=2)
+    return json.dumps(difference, indent=2)
