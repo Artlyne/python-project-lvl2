@@ -1,27 +1,32 @@
-def build_difference(difference, path=''):
-    diff = []
-    for key, (status, value) in sorted(difference.items()):
-        if status == 'nested':
-            diff.append(build_difference(value, path=path + f'{key}.'))
+from gendiff import diff
 
-        elif status == 'removed':
-            diff.append(f"Property '{path}{key}' was removed")
 
-        elif status == 'added':
+def build_difference(raw_diff, path=''):
+
+    lines = []
+
+    for key, (status, value) in sorted(raw_diff.items()):
+
+        prefix = f"Property '{path}{key}' was"
+
+        if status == diff.NESTED:
+            lines.extend(build_difference(value, path=f'{path}{key}.'))
+
+        elif status == diff.REMOVED:
+            lines.append(f"{prefix} removed")
+
+        elif status == diff.ADDED:
             if isinstance(value, dict):
                 value = 'complex value'
-            diff.append(f"Property '{path}{key}' was added with value: "
-                        f"'{value}'")
+            lines.append(f"{prefix} added with value: '{value}'")
 
-        elif status == 'changed':
-            removed_value = value[0]
-            added_value = value[1]
-            diff.append(f"Property '{path}{key}' was changed. "
-                        f"From '{removed_value}' to '{added_value}'")
+        elif status == diff.CHANGED:
+            old, new = value
+            lines.append(f"{prefix} changed. From '{old}' to '{new}'")
 
-    return '\n'.join(diff)
+    return lines
 
 
-def format(difference):
-    diff = build_difference(difference)
-    return diff
+def format(raw_diff):
+    difference = build_difference(raw_diff)
+    return '\n'.join(difference)
