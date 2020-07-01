@@ -20,7 +20,6 @@ def parse_args():
         '-f', '--format',
         help='set format of output',
         default=format.DEFAULT,
-        # choices=format.FORMATTERS,
         type=formatter,
     )
     args = parser.parse_args()
