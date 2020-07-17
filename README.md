@@ -14,7 +14,7 @@ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://
 
 ### USAGE
 ```
-usage: gendiff [-h] [-f {plain,json}] first_file second_file
+usage: gendiff [-h] [-f FORMAT] first_file second_file
 
 Generate diff
 
@@ -24,8 +24,9 @@ positional arguments:
 
 optional arguments:
   -h, --help            show this help message and exit
-  -f {plain,json}, --format {plain,json}
-                        set format of output
+  -f FORMAT, --format FORMAT
+                        set format of output (default, plain, json)
+
 ```
 example:
 ```
@@ -39,7 +40,7 @@ Property 'verbose' was added with value: 'True'
 
 Available three different formats for display the difference.
 
-#### Extended (default)
+#### Default
 ```
 {
     common: {
