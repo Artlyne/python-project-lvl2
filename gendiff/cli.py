@@ -18,7 +18,7 @@ def parse_args():
     parser.add_argument('second_file')
     parser.add_argument(
         '-f', '--format',
-        help='set format of output',
+        help='set format of output (default, plain, json)',
         default=format.DEFAULT,
         type=formatter,
     )
